@@ -6,7 +6,6 @@
     outline: none; 
     border: none;
     text-decoration: none;
-    
 }
 
 html{
@@ -27,6 +26,7 @@ header{
 
 header .name{
     font-size: 48px;
+    margin-right: 135px;
     font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
     color: rgb(168, 16, 16);
     font-weight: bolder;
@@ -41,11 +41,11 @@ header .bar{
     align-items: center;
     gap: 3px;
     transform: translateX(-20%);
-
 }
 
 header .symbol a{
     font-size: 32px;
+    margin-right: 50px;
     color: black;
 }
 
@@ -60,12 +60,18 @@ header .bar a{
 }
 
 header .bar a:hover{
+    text-decoration: underline;
     color: rgb(168, 16, 16);
 }
 
 section{
     padding: 16px 5%;
+}
 
+section:has(.ad) {
+    padding-left: 0;
+
+    padding-right: 0;
 }
 
 .home {
@@ -76,8 +82,10 @@ section{
 .ad {
     position: relative;
     width: 100%; height: 400px;
-    margin: 120px auto 30px;
+    margin: 100px 0 30px;
+padding: 0px;
     overflow: hidden;
+box-shadow: 0 10px 24px red;
 }
 
 .ad video {
@@ -86,7 +94,7 @@ section{
     display: block;
 }
 
-.grp {
+.abt {
     width: 100%;
     padding: 0 5%;
     margin-top: -45px;
@@ -119,20 +127,15 @@ section{
     font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande','Lucida Sans Unicode', Geneva, Verdana, sans-serif;
 }
 
-.sho a{
-    margin: 16px 0px 0px 400px;
-    text-align: center;
-    width: 50%;
-    display: block;
-    padding: 12px 15%;
-    background-color: black;
-    color: white;
-    border-radius: 10px;
+.con .h{
+    margin-bottom: 30px;
 }
 
-.sho a:hover {
-    background-color: rgb(168, 16, 16);
-    color: white;
+.socials {
+    position: relative;
+    margin-top: 30px;
+    width: 35%;
+    top: -10px;
 }
 
 
