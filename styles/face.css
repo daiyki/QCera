@@ -1,76 +1,31 @@
 * {
     box-sizing: border-box;
-    margin: 0; 
+    margin: 0;
     padding: 0;
-    font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
-    outline: none; 
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    outline: none;
     border: none;
     text-decoration: none;
 }
 
-html{
+html {
     scroll-behavior: smooth;
+    max-width: 100%;
+    overflow-x: clip;
 }
 
-header{
-    position: fixed;
-    top: 0; left: 0; right: 0;
-    background-color: white;
-    padding: 10px 3%;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    z-index: 1000;
-    box-shadow: 0 10px 24px rgba(0,0, 0, .1);
+body {
+    width: 100%;
+    max-width: 100%;
+    overflow-x: clip;
 }
 
-header .name{
-    font-size: 48px;
-    margin-right: 135px;
-    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
-    color: rgb(168, 16, 16);
-    font-weight: bolder;
-}
-
-header .name span{
-    color: black;
-}
-
-header .bar{
-    display: flex;
-    align-items: center;
-    gap: 3px;
-    transform: translateX(-20%);
-}
-
-header .symbol a{
-    font-size: 32px;
-    margin-right: 50px;
-    color: black;
-}
-
-header .symbol a:hover{
-    color: rgb(168, 16, 16);
-}
-
-header .bar a{
-    font-size: 24px;
-    padding: 0 36px;
-    color: grey;
-}
-
-header .bar a:hover{
-    text-decoration: underline;
-    color: rgb(168, 16, 16);
-}
-
-section{
+section {
     padding: 16px 5%;
 }
 
 section:has(.ad) {
     padding-left: 0;
-
     padding-right: 0;
 }
 
@@ -83,9 +38,9 @@ section:has(.ad) {
     position: relative;
     width: 100%; height: 400px;
     margin: 100px 0 30px;
-padding: 0px;
+    padding: 0;
     overflow: hidden;
-box-shadow: 0 10px 24px red;
+    box-shadow: 0 10px 24px red;
 }
 
 .ad video {
@@ -105,6 +60,7 @@ box-shadow: 0 10px 24px red;
 
 .model {
     width: 35%;
+    margin-top: 45px;
     text-align: right;
 }
 
@@ -116,30 +72,41 @@ box-shadow: 0 10px 24px red;
 .about h1 {
     font-size: 57px;
     line-height: 1.5;
-    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI',Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue',sans-serif;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont,'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell,'Open Sans', 'Helvetica Neue', sans-serif;
     margin-bottom: 20px;
 }
 
 .about p {
-    font-size: 18px;
+    font-size: 20px;
     top: 10%;
     line-height: 2.5;
-    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande','Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif
 }
 
-.con .h{
+.con .h {
     margin-bottom: 30px;
 }
 
-.socials {
-    position: relative;
-    margin-top: 30px;
-    width: 35%;
-    top: -10px;
+section:has(.latest-product) {
+    padding-left: 0;
+    padding-right: 0;
 }
 
+.latest-product {
+    position: relative;
+    width: 100%; height: 400px;
+    margin: 0px 0 30px;
+    padding: 0;
+    overflow: hidden;
+    
+}
+
+.latest-product video {
+    width: 100%; height: 100%;
+    object-fit: cover;
+    display: block;
+}
 
 ::-webkit-scrollbar {
     display: none;
 }
-
