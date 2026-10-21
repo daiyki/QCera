@@ -1,5 +1,4 @@
 <?php
-//starts the session of the user ONLY if the user is LOGGED IN
 session_start();
 ?>
 
@@ -10,6 +9,7 @@ session_start();
         <title>QCera</title>
         <link rel= "stylesheet" href="styles/face.css">
         <link rel="stylesheet" href="styles/header.css">
+        <link rel= "stylesheet" href="styles/footer.css">
         <link rel ="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.3.1/css/all.min.css">
 
         
@@ -18,33 +18,30 @@ session_start();
     <body>
 
         <header>
-    <!--nav bar dawg-->
             <section class="name">QC<span>ERA</span></section>
 
-            <nav class="bar">
-                <a href="#">HOME</a>
-                <a href="#about" id=>ABOUT</a>
-                <a href="#review">REVIEWS</a>
-                <a href="#contact">CONTACT</a>
-            </nav>
-            <!-- user icon -->
-            <div class ="symbol">
+                <nav class="bar">
+                    <a href="#">HOME</a>
+                    <a href="#product">PRODUCTS</a>
+                    <a href="#about">ABOUT</a>
+                    <a href="#foot">CONTACT</a>
+                </nav>
+
+        <div class="symbol">
                 <a href="#" class="fas fa-user" onclick="document.getElementById('user').showModal(); return false;"></a>
             </div>
 
             <dialog id="user">
 
-
 <?php
-    // check if the user is logged in
     if (isset($_SESSION['loggedin']) && $_SESSION['loggedin'] === true) {
-        // content visible ONLY to logged IN users
+        
         echo "<p>Welcome, " . htmlspecialchars($_SESSION['username']) . "!</p>";
         echo "<p><a href='home.php'>Logout</a></p><br>";
         session_destroy();
 
     } else {
-        // content visible ONLY to logged OUT guests
+        
         echo "<a href='login.php'>Login</a><br>";
     }
     ?>
@@ -53,64 +50,70 @@ session_start();
             </dialog>
         </header>
 
-    <!--video / ad-->
-        <section class="ad">
-            <video autoplay muted loop>
-                <source src="adi.mp4" type="video/mp4">
-            </video>
-        </section>
+    <section class="ad">
+        <video autoplay muted loop>
+            <source src="adi.mp4" type="video/mp4">
+        </video>
+    </section>
 
 
          <section class="abt">
-            <div class="about">
+        <div class="about">
 
-                <h1>
-                    UPGRADE YOUR DESK,
-                    <br>ENHANCE YOUR SETUP
-                </h1>
-                
-                <p>
-                    Introducing QCera. We offer different PC accessories that are useful for powering up your desk, such as keyboards, mouse, and other accessories. We created this online store to provide PC components in an easier and more convenient way. Our goal is to create a website that makes browsing easier for customers while providing useful information and affordable prices.
-                </p>
+            <h1>
+                UPGRADE YOUR DESK,
+                <br>ENHANCE YOUR SETUP
+            </h1>
+
+            <p>
+                Introducing QCera, where great performance starts with the right gear. A brand dedicated to produce PC
+                products and reliable performance to enhance your everyday experience. From keyboards to essential PC
+                accessories, we aim to bring convenience and style to every setup.
+                <br>
+                Offering practical products that suit your needs. Whether you're studying, working, gaming, or building
+                your dream setup, QCera is here to help you make the most of every moment.
+            </p>
+        </div>
 
 
-            </div>
-
-
-            <div class="model">
-                <img src="model1.png">
-            </div>
-        </section>
+        <div class="model">
+            <img src="model1.png">
+        </div>
+    </section>
 
         <section class="Products" id="product">
-			<h1>LATEST PRODUCTS</h1>
+        <h1>LATEST PRODUCTS</h1>
 
-		
+    </section>
 
-        </section>
+    <section class="product-ads">
+
+        <div class="latest-product">
+            <video autoplay muted loop>
+                <source src="adi.mp4" type="video/mp4">
+            </video>
+        </div>
         
-        <section class="con" id="contact">
+    </section>
+        
+        <footer class="foot" id="foot">
+        <h1>QC<span>ERA</span></h1>
+        <p>One-stop shop for premium <br>PC components and accessories.</p>
 
-			<h1>CONTACT US</h1>
+        <div class="footlinks">
+            <a href="" class="fab fa-facebook-f"></a>
+            <a href="" class="fab fa-instagram"></a>
+            <a href="" class="fab fa-youtube"></a>
+            <a href="" class="fab fa-tiktok"></a>
+        </div>
 
-				<div class="social">
-					<br>
-						<a href="https://facebook.com">
-						<img src="facebooklogo.png">   Facebook
-						</a>
 
-					<br>
-						<a href="https://gmail.com">
-						<img src="emaillogo.png">   E-mail
-						</a>
-
-				</div>
-	
-            
-        </section>
+        <p class="copyright">
+            &copy; 2026 QCera. All Rights Reserved.
+        </p>
+    </footer>
 
     
-    <script src="script.js"></script>
     </body>
 
 
