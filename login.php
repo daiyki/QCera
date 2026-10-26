@@ -20,7 +20,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             session_regenerate_id(true);
             $_SESSION['loggedin'] = true;
             $_SESSION['username'] = $user['username'];
-            header("Location: home.php");
+            header("Location: first.php");
             exit();
         } else {
             

@@ -1,4 +1,3 @@
-// connects to the local database
 <?php
 $dbhost = "localhost";
 $dbuser = "root";
