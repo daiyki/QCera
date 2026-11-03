@@ -20,7 +20,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             session_regenerate_id(true);
             $_SESSION['loggedin'] = true;
             $_SESSION['username'] = $user['username'];
-            header("Location: home.php");
+            header("Location: first.php");
             exit();
         } else {
             
@@ -38,7 +38,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login</title>
-    <link rel="stylesheet" href="styles/forms.css">
 </head>
 <body>
     <form method="POST">
@@ -48,10 +47,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <label for="password">Password:</label>
         <input type="password" id="password" name="password" required><br>
 
-        
         <input type="submit" value="Login">
-        
-        <button onclick="location.href='register.php'">Register</button> <br>
     </form>
 </body>
 </html>

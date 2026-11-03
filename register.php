@@ -19,8 +19,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         
         $insertQuery = "INSERT INTO users (username, email, address, password) VALUES ('$username', '$email', '$address', '$password')";
         if (mysqli_query($conn, $insertQuery)) {
-            echo "Registration successful!    Redirecting to login page...";
-            header("Refresh: 5; url=login.php");
+            echo "Registration successful!";
         } else {
             echo "Error: " . mysqli_error($conn);
         }
@@ -34,7 +33,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Register</title>
-    <link rel="stylesheet" href="styles/forms.css">
 </head>
 <body>
     <form method="POST">
@@ -50,10 +48,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <label for="password">Password:</label>
         <input type="password" id="password" name="password" required><br>
 
-        
-        <input type="submit" value="Register"><br>
-
-        <button onclick="location.href='login.php'">Log in</button>
+        <input type="submit" value="Register">
     </form>
 </body>
 </html>
