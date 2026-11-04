@@ -17,8 +17,6 @@ session_start();
         <link rel= "stylesheet" href="imgvid/Monitor2.jpeg">
         <link rel= "stylesheet" href="imgvid/adi.mp4">
         <link rel ="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.3.1/css/all.min.css">
-
-        
     </head>
 
     <body>
@@ -34,26 +32,40 @@ session_start();
                 </nav>
 
         <div class="symbol">
-                <a href="#" class="fas fa-user" onclick="document.getElementById('user').showModal(); return false;"></a>
-            </div>
+    <a href="#" class="fas fa-user"
+       onclick="document.getElementById('user').showModal(); return false;">
+    </a>
+</div>
 
-            <dialog id="user">
+<dialog id="user">
 
-<?php
-    if (isset($_SESSION['loggedin']) && $_SESSION['loggedin'] === true) {
-        
-        echo "<p>Welcome, " . htmlspecialchars($_SESSION['username']) . "!</p>";
-        echo "<p><a href='first.php'>Logout</a></p><br>";
-        session_destroy();
+    <div class="user-content">
 
-    } else {
-        
-        echo "<a href='login.php'>Login</a><br>";
-    }
-    ?>
+        <div class="user-icon">
+            <i class="fas fa-user"></i>
+        </div>
 
-                <button onclick="document.getElementById('user').close();">Close</button>
-            </dialog>
+        <?php
+        if (isset($_SESSION['loggedin']) && $_SESSION['loggedin'] === true) {
+            echo "<h2>Welcome!</h2>";
+            echo "<p class='username'>" . htmlspecialchars($_SESSION['username']) . "</p>";
+
+        } else {
+            echo "<h2>Welcome to QCera!</h2>";
+            echo "<p>Log in to acces your account.</p>";
+            echo "<a href='login.php' class='user-link'>Login</a>";
+        }
+        ?>
+
+        <button type="button"
+            onclick="document.getElementById('user').close();">
+            Close
+        </button>
+
+    </div>
+
+</dialog>
+            
         </header>
 
     <section class="ad">
@@ -158,6 +170,15 @@ session_start();
             <div class="name">
                 <span>QCera</span>
                 <h5>Keyboard</h5>
+            </div>
+        </a>
+
+        <a href="pc-components.html" class="prod">
+            <img src="imgvid/.jpeg">
+
+            <div class="name">
+                <span>QCera</span>
+                <h5>PC Components</h5>
             </div>
         </a>
 
