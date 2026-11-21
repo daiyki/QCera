@@ -1,0 +1,65 @@
+.foot {
+    background-color: black;
+    color: white;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding: 25px 40px 15px;
+    margin-top: 30px;
+}
+
+.foot .name-foot img {
+    width: 210px; height: auto;
+    object-fit: contain;
+    display: block;
+    margin: 0 auto 5px;
+}
+
+.foot p {
+    color: #ccc;
+    font-size: 18px;
+    font-family: system-ui, sans-serif;
+    line-height: 1.5;
+    margin: 5px 0 20px;
+}
+
+.footlinks {
+    display: flex;
+    justify-content: center;
+    margin: 10px 0 15px;
+}
+
+.footlinks a {
+    color: white;
+    text-decoration: none;
+    margin: 0 12px;
+    transition: 0.3s;
+}
+
+.footlinks a:hover {
+    color: rgb(168, 16, 16);
+}
+
+.foot .quicklinks {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 30px;
+    margin-top: 10px;
+}
+
+.foot .quicklinks a {
+    color: white;
+    font-size: 18px;
+    text-decoration: none;
+}
+
+.foot .copyright {
+    width: 100%;
+    border-top: 1px solid #444;
+    padding-top: 12px;
+    margin-top: 25px;
+    font-size: 15px;
+    text-align: center;
+}
