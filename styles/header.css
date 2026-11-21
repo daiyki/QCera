@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 * {
     box-sizing: border-box;
     margin: 0;
@@ -157,4 +158,165 @@ header .bar a:hover::after {
 
 .user-content button:hover {
     color: rgb(168, 16, 16);
+=======
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: verdana, Geneva, Tahoma, sans-serif;
+}
+
+header {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    background: white;
+    padding: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    z-index: 1000;
+    box-shadow: 0 10px 24px rgba(0, 0, 0, .1);
+    transition: transform 0.2s ease-in-out;
+}
+
+header.hide {
+    transform: translateY(-100%);
+}
+
+header .name {
+    width: 400px; height: 65px;
+    display: flex;
+    align-items: center;
+}
+
+header .name img {
+    width: 150px; height: 150px;
+    object-fit: contain;
+}
+
+header .bar {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    transform: translateX(-20%);
+}
+
+header .symbol a {
+    font-size: 32px;
+    margin-right: 50px;
+    color: black;
+}
+
+header .symbol a:hover {
+    color: rgb(168, 16, 16);
+}
+
+header .bar a {
+    position: relative;
+    text-decoration: none;
+    color: black;
+    font-size: 20px;
+    padding: 0 36px;
+}
+
+header .bar a::after {
+    content: "";
+    position: absolute;
+    left: 0; bottom: -5px;
+    width: 100%; height: 2px;
+    background-color: rgb(168, 16, 16);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.3s ease-in-out;
+}
+
+header .bar a:hover {
+    color: rgb(168, 16, 16);
+}
+
+header .bar a:hover::after {
+    transform: scaleX(1);
+}
+
+#user {
+    position: fixed;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    width: 350px;
+    max-width: 90%;
+    padding: 35px;
+    background: white;
+    color: black;
+    border-radius: 12px;
+    box-shadow: 0 20px 35px rgba(0, 0, 0, 0.25);
+    text-align: center;
+}
+
+#user::backdrop {
+    background: rgba(0, 0, 0, 0.65);
+    backdrop-filter: blur(5px);
+}
+
+.user-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+}
+
+.user-icon {
+    width: 65px;
+    height: 65px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgb(168, 16, 16);
+    color: white;
+    border-radius: 50%;
+    font-size: 25px;
+}
+
+.user-content h2 {
+    font-size: 23px;
+    color: black;
+}
+
+.user-content p {
+    font-size: 14px;
+    color: grey;
+}
+
+.user-content .username {
+    font-size: 19px;
+    font-weight: bold;
+    color: rgb(168, 16, 16);
+}
+
+.user-link {
+    display: block;
+    width: 100%;
+    padding: 12px;
+    background: rgb(168, 16, 16);
+    color: white;
+    border-radius: 6px;
+    font-weight: bold;
+    text-align: center;
+    transition: 0.3s ease;
+}
+
+.user-link:hover {
+    background: black;
+}
+
+.user-content button {
+    width: 100%;
+    padding: 12px;
+    background: #eeeeee;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+.user-content button:hover {
+    color: rgb(168, 16, 16);
+>>>>>>> e17bb4b792d6e82657e33b0815f0946485e9a5ee
 }
