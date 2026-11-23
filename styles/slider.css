@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 .slidewrap {
     position: relative;
     width: 100vw;
@@ -16,79 +15,37 @@
     scroll-snap-type: x mandatory;
     scroll-behavior: smooth;
     box-shadow: 0 0 20px red;
+    scrollbar-width: none;
 }
 
-.slider img {
+.slide {
     flex: 0 0 100%;
     min-width: 100%;
     height: 100%;
-    object-fit: cover;
     scroll-snap-align: start;
 }
 
-.slidernav {
-    display: flex;
-    gap: 8px;
-    position: absolute;
-    bottom: 15px;
-    left: 50%;
-    transform: translateX(-50%);
-    z-index: 2;
-}
-
-.slidernav a {
+.slide img {
     display: block;
-    width: 12px;
-    height: 12px;
-    flex-shrink: 0;
-    border-radius: 50%;
-    background: white;
-    border: 1px solid black;
-=======
-.slidewrap {
-    position: relative;
-    width: 100vw;
-    max-width: none;
-    margin-left: calc(50% - 50vw);
-}
-
-.slider {
-    display: flex;
-    flex-direction: row;
     width: 100%;
-    aspect-ratio: 851 / 315;
-    overflow-x: auto;
-    overflow-y: hidden;
-    scroll-snap-type: x mandatory;
-    scroll-behavior: smooth;
-    box-shadow: 0 0 20px red;
-}
-
-.slider img {
-    flex: 0 0 100%;
-    min-width: 100%;
     height: 100%;
     object-fit: cover;
-    scroll-snap-align: start;
 }
 
 .slidernav {
     display: flex;
     gap: 8px;
     position: absolute;
-    bottom: 15px;
-    left: 50%;
+    bottom: 15px; left: 50%;
     transform: translateX(-50%);
     z-index: 2;
 }
 
 .slidernav a {
     display: block;
-    width: 12px;
-    height: 12px;
+    width: 12px; height: 12px;
     flex-shrink: 0;
     border-radius: 50%;
     background: white;
     border: 1px solid black;
->>>>>>> e17bb4b792d6e82657e33b0815f0946485e9a5ee
 }

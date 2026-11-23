@@ -1,26 +1,64 @@
 <?php
-require_once 'db.php';
+require_once 'functions.php';
+
+if (is_logged_in()) {
+    header('Location: first.php');
+    exit;
+}
+
+$errors = [];
+$old = ['email' => '', 'username' => '', 'address' => ''];
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    
-    $email = filter_var($_POST["email"], FILTER_SANITIZE_EMAIL);
-    $username = filter_var($_POST["username"], FILTER_SANITIZE_STRING);
-    $address = filter_var($_POST["address"], FILTER_SANITIZE_STRING);
-    $password = password_hash($_POST["password"], PASSWORD_DEFAULT);
+    csrf_check();
 
-    
-    $checkQuery = "SELECT * FROM users WHERE username = '$username' OR email = '$email'";
-    $checkResult = mysqli_query($conn, $checkQuery);
+    // no more FILTER_SANITIZE_STRING (deprecated) - values are validated and always escaped on output
+    $old['email']    = trim($_POST['email'] ?? '');
+    $old['username'] = trim($_POST['username'] ?? '');
+    $old['address']  = trim($_POST['address'] ?? '');
+    $passwordRaw     = $_POST['password'] ?? '';
 
-    if (mysqli_num_rows($checkResult) > 0) {
-        echo "Username or email already exists.";
-    } else {
-        
-        $insertQuery = "INSERT INTO users (username, email, address, password) VALUES ('$username', '$email', '$address', '$password')";
-        if (mysqli_query($conn, $insertQuery)) {
-            echo "Registration successful!";
+    if (!filter_var($old['email'], FILTER_VALIDATE_EMAIL) || strlen($old['email']) > 255) {
+        $errors[] = 'Please enter a valid email address.';
+    }
+    if (!valid_username($old['username'])) {
+        $errors[] = 'Username must be 3-30 characters (letters, numbers, spaces, dot, dash or underscore).';
+    }
+    if (mb_strlen($old['address']) < 5 || mb_strlen($old['address']) > 255) {
+        $errors[] = 'Please enter a complete address (5-255 characters).';
+    }
+    if (!valid_password($passwordRaw)) {
+        $errors[] = PASSWORD_RULE;
+    }
+
+    if (!$errors) {
+        $exists = db_one(
+            'SELECT id FROM users WHERE username = ? OR email = ?',
+            'ss',
+            [$old['username'], $old['email']]
+        );
+
+        if ($exists) {
+            $errors[] = 'Username or email already exists.';
         } else {
-            echo "Error: " . mysqli_error($conn);
+            try {
+                // new sign-ups are ALWAYS regular users; admins are created only inside the admin portal
+                db_exec(
+                    "INSERT INTO users (username, email, address, password, role) VALUES (?, ?, ?, ?, 'user')",
+                    'ssss',
+                    [$old['username'], $old['email'], $old['address'], password_hash($passwordRaw, PASSWORD_DEFAULT)]
+                );
+                flash('success', 'Registration successful! You can now log in.');
+                header('Location: login.php');
+                exit;
+            } catch (mysqli_sql_exception $e) {
+                if ((int)$e->getCode() === 1062) {
+                    $errors[] = 'Username or email already exists.';
+                } else {
+                    error_log('register: ' . $e->getMessage());
+                    $errors[] = 'Something went wrong. Please try again.';
+                }
+            }
         }
     }
 }
@@ -28,26 +66,75 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Register</title>
+
+    <title>QCera | Register</title>
+
+    <link rel="stylesheet" href="styles/register.css">
+    <link rel="stylesheet" href="styles/responsive.css">
 </head>
+
 <body>
-    <form method="POST">
-        <label for="email">Email:</label>
-        <input type="email" id="email" name="email" required><br>
 
-        <label for="username">Username:</label>
-        <input type="text" id="username" name="username" required><br>
+    <div class="bg">
+        <video autoplay muted loop playsinline>
+            <source src="imgvid/adi.mp4" type="video/mp4">
+        </video>
+    </div>
 
-        <label for="address">Address:</label>
-        <input type="text" id="address" name="address" required><br>
+    <div class="register-container">
 
-        <label for="password">Password:</label>
-        <input type="password" id="password" name="password" required><br>
+        <a href="first.php" class="exit-btn">&times;</a>
 
-        <input type="submit" value="Register">
-    </form>
+        <div class="register-header">
+            <h1>QC<span>ERA</span></h1>
+            <p>Create your account</p>
+        </div>
+
+        <?php if ($errors): ?>
+            <p class="error-message">
+                <?php foreach ($errors as $e): ?><?= h($e) ?><br><?php endforeach; ?>
+            </p>
+        <?php endif; ?>
+
+        <form method="POST" action="register.php">
+            <?= csrf_field() ?>
+
+            <div class="register-group">
+                <input type="email" id="email" name="email" value="<?= h($old['email']) ?>" maxlength="255" required>
+                <label for="email">Email</label>
+                <span class="underline"></span>
+            </div>
+
+            <div class="register-group">
+                <input type="text" id="username" name="username" value="<?= h($old['username']) ?>" maxlength="30" required>
+                <label for="username">Username</label>
+                <span class="underline"></span>
+            </div>
+
+            <div class="register-group">
+                <input type="text" id="address" name="address" value="<?= h($old['address']) ?>" maxlength="255" required>
+                <label for="address">Address</label>
+                <span class="underline"></span>
+            </div>
+
+            <div class="register-group">
+                <input type="password" id="password" name="password" minlength="8" maxlength="72" required>
+                <label for="password">Password</label>
+                <span class="underline"></span>
+            </div>
+
+            <input type="submit" value="Register" class="register-btn">
+
+        </form>
+
+        <div class="register-footer"> Already have an account?
+            <br><a href="login.php">Login</a>
+        </div>
+    </div>
 </body>
+
 </html>

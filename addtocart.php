@@ -1,155 +1,107 @@
 <?php
-session_start();
-require_once 'db.php';
-require_once 'shop_helpers.php';
+require_once 'functions.php';
+require_login();
 
-require_login(); // guests get sent to login.php
+$uid   = (int)$_SESSION['user_id'];
+$items = get_cart_items($uid);
 
-if ($_SERVER["REQUEST_METHOD"] === "POST") {
-    $action = $_POST['action'] ?? '';
-    $id     = $_POST['id'] ?? '';
-
-    if ($action === 'remove') {
-        unset($_SESSION['cart'][$id]);
-        $_SESSION['flash'] = "Item removed.";
-
-    } elseif ($action === 'update') {
-        $qty = (int) ($_POST['qty'] ?? 0);
-        if (isset($_SESSION['cart'][$id])) {
-            if ($qty < 1) {
-                unset($_SESSION['cart'][$id]);
-            } else {
-                $_SESSION['cart'][$id] = min($qty, 99);
-            }
-        }
-        $_SESSION['flash'] = "Cart updated.";
-
-    } elseif ($action === 'checkout') {
-        $cart = $_SESSION['cart'] ?? [];
-        if (empty($cart)) {
-            $_SESSION['flash'] = "Your cart is empty.";
-        } elseif (place_order($conn, $cart)) {
-            unset($_SESSION['cart']);
-            $_SESSION['flash'] = "Order placed! Thank you for shopping at QCera.";
-        } else {
-            $_SESSION['flash'] = "Sorry, we could not place your order. Please try again.";
-        }
-    }
-
-    header("Location: addtocart.php");
-    exit();
-}
-
-$message = '';
-if (isset($_SESSION['flash'])) {
-    $message = $_SESSION['flash'];
-    unset($_SESSION['flash']);
-}
-
-$cart  = $_SESSION['cart'] ?? [];
 $total = 0;
+$count = 0;
+$blocked = false;
+foreach ($items as $it) {
+    $total += (int)$it['productPrice'] * (int)$it['qty'];   // quantity x price
+    $count += (int)$it['qty'];
+    if ((int)$it['productStock'] < (int)$it['qty']) {
+        $blocked = true;
+    }
+}
+
+$pageTitle = 'QCera | My Cart';
+$css = ['header', 'store', 'footer'];
+$navItems = account_nav();
+
+include 'partials/head.php';
+include 'partials/site_header.php';
 ?>
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>QCera - Cart</title>
-</head>
-<body>
-    <h1>My Cart</h1>
+    <main class="page">
+        <div class="wrap">
 
-    <?php if ($message !== ''): ?>
-        <p><?php echo htmlspecialchars($message); ?></p>
-    <?php endif; ?>
+            <div class="page-head">
+                <h1>MY <span>CART</span></h1>
+                <p>Review the items you've added</p>
+            </div>
 
-    <?php if (empty($cart)): ?>
-        <p>Your cart is empty.</p>
-    <?php else: ?>
-        <table border="1" cellpadding="6">
-            <tr>
-                <th>Product</th>
-                <th>Price</th>
-                <th>Quantity</th>
-                <th>Subtotal</th>
-                <th></th>
-            </tr>
+            <?= flash_html() ?>
 
-            <?php foreach ($cart as $id => $qty): ?>
-                <?php
-                if (!isset($PRODUCTS[$id])) { continue; }
-                $price    = $PRODUCTS[$id]['price'];
-                $subtotal = $price * $qty;
-                $total   += $subtotal;
-                ?>
-                <tr>
-                    <td><?php echo htmlspecialchars($PRODUCTS[$id]['name']); ?></td>
-                    <td>₱ <?php echo number_format($price, 2); ?></td>
-                    <td>
-                        <form method="post">
-                            <input type="hidden" name="action" value="update">
-                            <input type="hidden" name="id" value="<?php echo htmlspecialchars($id); ?>">
-                            <input type="number" class="cart-qty" name="qty" value="<?php echo (int) $qty; ?>" min="1" max="99"
-                                   data-unit-price="<?php echo (float) $price; ?>">
-                            <input type="submit" value="Update">
-                        </form>
-                    </td>
-                    <td class="cart-subtotal">₱ <span><?php echo number_format($subtotal, 2); ?></span></td>
-                    <td>
-                        <form method="post">
-                            <input type="hidden" name="action" value="remove">
-                            <input type="hidden" name="id" value="<?php echo htmlspecialchars($id); ?>">
-                            <input type="submit" value="Remove">
-                        </form>
-                    </td>
-                </tr>
-            <?php endforeach; ?>
-        </table>
+            <?php if (!$items): ?>
+                <div class="card empty-state">
+                    <i class="fas fa-shopping-cart"></i>
+                    <p>Your cart is empty.</p>
+                    <a href="first.php#latest" class="btn btn-primary">START SHOPPING</a>
+                </div>
+            <?php else: ?>
+                <div class="two-col">
 
-        <p><strong>Total: ₱ <?php echo number_format($total, 2); ?></strong></p>
+                    <div class="card">
+                        <?php foreach ($items as $it): $line = (int)$it['productPrice'] * (int)$it['qty']; ?>
+                            <div class="cart-item">
+                                <img src="<?= h($it['productImg']) ?>" alt="<?= h($it['productName']) ?>">
 
-        <form method="post">
-            <input type="hidden" name="action" value="checkout">
-            <input type="submit" value="Checkout">
-        </form>
-    <?php endif; ?>
+                                <div class="ci-info">
+                                    <a href="product.php?id=<?= (int)$it['productId'] ?>"><h3><?= h($it['productName']) ?></h3></a>
+                                    <p class="muted">QCERA | <?= h($it['productCategory']) ?></p>
+                                    <p class="unit-price"><?= peso($it['productPrice']) ?></p>
+                                    <?php if ((int)$it['productStock'] <= 0): ?>
+                                        <p class="stock-warn">Out of stock - please remove this item.</p>
+                                    <?php elseif ((int)$it['productStock'] < (int)$it['qty']): ?>
+                                        <p class="stock-warn">Only <?= (int)$it['productStock'] ?> left - please lower the quantity.</p>
+                                    <?php endif; ?>
+                                </div>
 
-    <p><a href="first.php">Continue shopping</a></p>
+                                <div class="ci-actions">
+                                    <form method="POST" action="cart_action.php" class="inline-form">
+                                        <?= csrf_field() ?>
+                                        <input type="hidden" name="action" value="update">
+                                        <input type="hidden" name="product_id" value="<?= (int)$it['productId'] ?>">
+                                        <input type="number" name="quantity" value="<?= (int)$it['qty'] ?>" min="1" max="<?= max(1, (int)$it['productStock']) ?>" aria-label="Quantity">
+                                        <button type="submit" class="btn btn-outline btn-sm">UPDATE</button>
+                                    </form>
 
-    <script>
-        const cartQuantities = document.querySelectorAll('.cart-qty');
-        const cartTotal = document.querySelector('p strong');
+                                    <p class="line-total"><?= peso($line) ?></p>
 
-        cartQuantities.forEach(function (quantityInput) {
-            quantityInput.addEventListener('input', function () {
-                let quantity = parseInt(this.value, 10);
-                if (!Number.isFinite(quantity)) {
-                    quantity = 1;
-                }
-                quantity = Math.min(Math.max(quantity, 1), 99);
+                                    <form method="POST" action="cart_action.php">
+                                        <?= csrf_field() ?>
+                                        <input type="hidden" name="action" value="remove">
+                                        <input type="hidden" name="product_id" value="<?= (int)$it['productId'] ?>">
+                                        <button type="submit" class="link-danger">Remove</button>
+                                    </form>
+                                </div>
+                            </div>
+                        <?php endforeach; ?>
+                    </div>
 
-                const unitPrice = parseFloat(this.dataset.unitPrice);
-                const row = this.closest('tr');
-                row.querySelector('.cart-subtotal span').textContent =
-                    (unitPrice * quantity).toLocaleString(undefined, {
-                        minimumFractionDigits: 2,
-                        maximumFractionDigits: 2
-                    });
+                    <aside class="card summary">
+                        <h2><i class="fas fa-receipt"></i>Order Summary</h2>
+                        <div class="sum-row"><span>Items</span><span><?= $count ?></span></div>
+                        <div class="sum-row total"><span>Total</span><span><?= peso($total) ?></span></div>
 
-                let total = 0;
-                document.querySelectorAll('.cart-qty').forEach(function (input) {
-                    const qty = Math.min(Math.max(parseInt(input.value, 10) || 1, 1), 99);
-                    total += parseFloat(input.dataset.unitPrice) * qty;
-                });
-                if (cartTotal) {
-                    cartTotal.textContent = 'Total: ₱ ' + total.toLocaleString(undefined, {
-                        minimumFractionDigits: 2,
-                        maximumFractionDigits: 2
-                    });
-                }
-            });
-        });
-    </script>
+                        <?php if ($blocked): ?>
+                            <p class="stock-warn" style="margin:10px 0;">Fix the highlighted items to continue.</p>
+                            <button class="btn btn-primary btn-block" disabled>PROCEED TO CHECKOUT</button>
+                        <?php else: ?>
+                            <a href="checkout.php" class="btn btn-primary btn-block" style="margin-top:15px;">PROCEED TO CHECKOUT</a>
+                        <?php endif; ?>
+                        <a href="first.php#latest" class="btn btn-outline btn-block" style="margin-top:10px;">CONTINUE SHOPPING</a>
+                    </aside>
+
+                </div>
+            <?php endif; ?>
+
+        </div>
+    </main>
+
+<?php include 'partials/site_footer.php'; ?>
 </body>
+
 </html>

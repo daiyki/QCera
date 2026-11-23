@@ -1,0 +1,128 @@
+/* =========================================================
+   QCera - responsive rules ONLY.
+   Nothing here changes the desktop look; it only adapts the
+   existing design to smaller screens. Keep this file linked LAST.
+   ========================================================= */
+
+img { max-width: 100%; }
+
+.menu-toggle {
+    display: none;
+    background: none;
+    border: none;
+    font-size: 26px;
+    color: black;
+    cursor: pointer;
+    margin-left: 5px;
+    transition: 0.3s ease;
+}
+
+.menu-toggle:hover { color: rgb(168, 16, 16); }
+
+/* ---------- laptops / small desktops ---------- */
+@media (max-width: 1280px) {
+    header { padding: 18px 30px; }
+    header .bar { margin-left: 20px; }
+    header .bar a { margin-right: 28px; font-size: 15px; }
+    header .symbol a { margin-right: 24px; }
+}
+
+/* ---------- tablets & phones: header becomes a hamburger menu ---------- */
+@media (max-width: 900px) {
+    header { height: 80px; padding: 12px 20px; }
+    header .name { height: 56px; }
+    header .name img { height: 50px; }
+
+    .menu-toggle { display: block; }
+
+    header .symbol { margin-left: auto; }
+    header .symbol a { font-size: 26px; margin-right: 18px; }
+
+    header .bar {
+        display: none;
+        position: absolute;
+        top: 100%; left: 0; right: 0;
+        margin: 0;
+        padding: 6px 20px 18px;
+        flex-direction: column;
+        align-items: stretch;
+        gap: 0;
+        background: white;
+        box-shadow: 0 14px 24px rgba(0, 0, 0, 0.12);
+    }
+
+    header.open .bar { display: flex; }
+
+    header .bar a {
+        margin: 0;
+        padding: 14px 4px;
+        font-size: 16px;
+        border-bottom: 1px solid #eee;
+    }
+
+    header .bar a::after { display: none; }
+
+    /* page spacing under the shorter fixed header */
+    .ad { margin-top: 80px; height: 240px; }
+    .product-page { padding: 105px 5% 20px; }
+    header + .product { padding-top: 115px; }
+
+    /* home "about" block stacks */
+    .abt { flex-direction: column; margin-top: 0; padding: 0 5%; }
+    .model { width: 70%; margin-top: 10px; text-align: center; }
+    .model img { width: 100%; height: auto; }
+
+    .about h1 { font-size: 34px; }
+    .about p { font-size: 16px; line-height: 2; }
+
+    .heading h1, .latest h1, .shop h1, .product h1, .product h1 span { font-size: 32px; }
+    .heading p, .latest p, .shop p, .product p { font-size: 18px; }
+
+    /* product detail page */
+    .product-display { grid-template-columns: 1fr; gap: 20px; }
+    .product-image { height: 340px; }
+    .product-info h1 { font-size: 34px; }
+
+    /* category / related product grids */
+    .product .con { gap: 24px; }
+
+    /* footer */
+    .footer-container { flex-direction: column; gap: 10px; }
+    .foot p { margin-left: 0; }
+    .name-foot img { width: 170px; }
+    .foot { padding: 30px 22px; }
+}
+
+/* ---------- phones ---------- */
+@media (max-width: 480px) {
+    header { padding: 10px 14px; }
+    header .name img { height: 44px; }
+    header .symbol a { font-size: 22px; margin-right: 14px; }
+
+    .ad { height: 190px; }
+
+    .about h1 { font-size: 26px; }
+    .model { width: 90%; }
+
+    .heading h1, .latest h1, .shop h1, .product h1, .product h1 span { font-size: 26px; }
+    .heading p, .latest p, .shop p, .product p { font-size: 16px; }
+
+    .product .con { padding: 15px 0; }
+    .product .products { flex: 0 0 100%; width: 100%; max-width: 320px; }
+
+    .product-image { height: 270px; }
+    .product-info h1 { font-size: 28px; }
+    .price-section h2 { font-size: 24px; }
+    .purchase-buttons { flex-direction: column; }
+    .quantity-section { flex-wrap: wrap; }
+    .product-more { padding: 45px 6%; }
+
+    .about h1 { margin-top: 40px; }
+    .about p { margin-bottom: 50px; }
+
+    /* login / register */
+    .login-container, .register-container { padding: 34px 20px; border-radius: 12% 6%; }
+    .register-group { width: 100%; }
+    .login-header h1, .register-header h1 { font-size: 26px; }
+    .exit-btn { top: 14px; right: 16px; }
+}

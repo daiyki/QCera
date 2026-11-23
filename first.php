@@ -1,78 +1,27 @@
 <?php
-session_start();
+require_once 'functions.php';
 
-$isLoggedIn = isset($_SESSION['loggedin']) && $_SESSION['loggedin'] === true;
+// "Latest products" prices always come from the products table (single source of truth)
+$lp = array_column(
+    db_all('SELECT productId, productPrice FROM products WHERE productId IN (1, 3, 11, 16)'),
+    'productPrice',
+    'productId'
+);
+$price = fn($id) => number_format((float)($lp[$id] ?? 0), 2);
+
+$pageTitle = 'QCera';
+$css = ['face', 'header', 'slider', 'shop-categories', 'latestprod', 'footer'];
+$navItems = [
+    ['#', 'Home', 'HOME'],
+    ['#about', 'About Us', 'ABOUT'],
+    ['#featured', 'Newest Products', 'ARRIVALS'],
+    ['#latest', 'Products', 'SHOP'],
+    ['#foot', 'Contact Us', 'CONTACT'],
+];
+
+include 'partials/head.php';
+include 'partials/site_header.php';
 ?>
-
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <title>QCera</title>
-
-    <link rel="stylesheet" href="styles/face.css">
-    <link rel="stylesheet" href="styles/header.css">
-    <link rel="stylesheet" href="styles/slider.css">
-    <link rel="stylesheet" href="styles/footer.css">
-    <link rel="stylesheet" href="styles/latestprod.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.3.1/css/all.min.css">
-</head>
-
-<body>
-
-    <header>
-        <section class="name">
-            <img src="imgvid/qcera-logo.png">
-        </section>
-
-        <nav class="bar">
-            <a href="#">HOME</a>
-            <a href="#about">ABOUT</a>
-            <a href="#shop">PRODUCTS</a>
-            <a href="#foot">CONTACT</a>
-    
-        </nav>
-
-        <div class="symbol">
-            <a href="addtocart.php"><i class="fas fa-shopping-cart"></i></a>
-
-            <?php if ($isLoggedIn): ?>
-
-                <a href="#" class="fas fa-user" title="My Account" onclick="document.getElementById('user').showModal(); return false;"> </a>
-
-            <?php else: ?>
-                <a href="login.php" class="fas fa-user" title="Login"></a>
-            <?php endif; ?>
-
-        </div>
-
-        <?php if ($isLoggedIn): ?>
-
-        <dialog id="user">
-
-            <div class="user-content">
-
-                <h2>My Account</h2>
-                <p>Welcome to QCera!</p>
-
-                <p class="username"> <?php echo htmlspecialchars($_SESSION['username']); ?> </p>
-
-                <p> <?php echo htmlspecialchars($_SESSION['email']); ?> </p>
-
-                <a href="logout.php" class="user-link"> <i class="fas fa-sign-out-alt"></i>
-                    Logout
-                </a>
-
-                <button type="button" onclick="document.getElementById('user').close();">
-                    Close
-                </button>
-            </div>
-        </dialog>
-        <?php endif; ?>
-    </header>
 
     <section class="ad">
         <video autoplay muted loop>
@@ -95,9 +44,10 @@ $isLoggedIn = isset($_SESSION['loggedin']) && $_SESSION['loggedin'] === true;
 
     </section>
 
-    <section class="products" id="product">
+    <section class="featured" id="featured">
         <div class="heading">
-            <h1>FEATURED PRODUCTS</h1> <p>Discover our top picks</p>
+            <h1>FEATURED PRODUCTS</h1>
+            <p>Discover our top picks</p>
         </div>
 
         <div class="slidewrap">
@@ -133,144 +83,85 @@ $isLoggedIn = isset($_SESSION['loggedin']) && $_SESSION['loggedin'] === true;
     </section>
 
     <section class="latest" id="latest">
-        <h1>LATEST PRODUCTS</h1> <p>Explore our latest collection</p>
-    <a href="prods/keyboard2.php" class="keyra">
-    <div class="con">
-        <div class="product" title="QCera Keyboard - Keyra"> 
-            <div class="title"><h4>QC<span>era</span></h4> </div>
-        <div class="discount">20% DISCOUNT! <i class="fas fa-heart"></i></div>
-        
-        <img src="imgvid/Keyboard2.jpeg">
+        <h1>LATEST PRODUCTS</h1>
+        <p>Check out our newest arrivals</p>
+        <a href="product.php?id=1" class="keyan">
+            <div class="con">
 
-        <div class="name">
-            <h2>KEYRA</h2>
+                <div class="products" title="QCera Keyboard - Keyra">
+                    <div class="title">
+                        <h4>QC<span>era</span></h4>
+                    </div>
+                    <div class="discount">NOW AVAILABLE! <i class="fas fa-heart"></i></div>
 
-            <div class="rating">
-                <i class="fas fa-star"></i>
-                <i class="fas fa-star"></i>
-                <i class="fas fa-star"></i>
-                <i class="fas fa-star"></i>
-                <i class="fas fa-star-half-alt"></i>
-                <small>(4.5)</small>
+                    <img src="imgvid/Keyan.png">
+
+                    <div class="name">
+                        <h2>KEYAN</h2>
+
+                        <p class="price">₱ <?= $price(1) ?></p>
+                    </div>
+
+                </div>
+        </a>
+
+        <a href="product.php?id=3" class="crema">
+            <div class="products" title="QCera Keyboard - Crema">
+                <div class="title">
+                    <h4>QC<span>era</span></h4>
+                </div>
+                <div class="discount">NOW AVAILABLE! <i class="fas fa-heart"></i></div>
+
+                <img src="imgvid/Crema.jpeg">
+
+                <div class="name">
+                    <h2>CREMA</h2>
+
+                    <p class="price">₱ <?= $price(3) ?></p>
+                </div>
             </div>
-            <p class="price">₱ 2,750.00</p>
-        </div>
+        </a>
 
-    </div>
-    </a>
+        <a href="product.php?id=11" class="clickera">
+            <div class="products" title="QCera Mouse - Clickera">
+                <div class="title">
+                    <h4>QC<span>era</span></h4>
+                </div>
+                <div class="discount">NOW AVAILABLE! <i class="fas fa-heart"></i></div>
 
-    <a href="shop.php" class="shop-link">
-        <div class="product" title="QCera Mouse - Clickera"> 
-        <div class="title"><h4>QC<span>era</span></h4> </div>
-        <div class="discount">NOW AVAILABLE! <i class="fas fa-heart"></i></div>
-        
-        <img src="imgvid/Mouse2.jpeg">
+                <img src="imgvid/Clickera.jpeg">
 
-        <div class="name">
-            <h2>CLICKERA</h2>
+                <div class="name">
+                    <h2>CLICKERA</h2>
 
-            <div class="rating">
-                <i class="fas fa-star"></i>
-                <i class="fas fa-star"></i>
-                <i class="fas fa-star"></i>
-                <i class="fas fa-star"></i>
-                <i class="fas fa-star"></i>
-                <small>(5.0)</small>
+                    <p class="price">₱ <?= $price(11) ?></p>
+                </div>
             </div>
-            <p class="price">₱ 1,500.00</p>
-        </div>
-    </div>
-    </a>
+        </a>
 
-    <a href="shop.php" class="shop-link">
-        <div class="product" title="QCera Keyboard - Keyra"> 
-        <div class="title"><h4>QC<span>era</span></h4> </div>
-        <div class="discount">NEW RELEASE! <i class="fas fa-heart"></i></div>
-        
-        <img src="imgvid/Monitor1.jpeg">
+        <a href="product.php?id=16" class="panora">
+            <div class="products" title="QCera Monitor - Panora">
+                <div class="title">
+                    <h4>QC<span>era</span></h4>
+                </div>
+                <div class="discount">NEW RELEASE! <i class="fas fa-heart"></i></div>
 
-        <div class="name">
-            <h2>PANORA</h2>
+                <img src="imgvid/Panora.jpeg">
 
-            <div class="rating">
-                <i class="fas fa-star"></i>
-                <i class="fas fa-star"></i>
-                <i class="fas fa-star"></i>
-                <i class="fas fa-star"></i>
-                <i class="fas fa-star"></i>
-                <small>(5.0)</small>
+                <div class="name">
+                    <h2>PANORA</h2>
+
+                    <p class="price">₱ <?= $price(16) ?></p>
+                </div>
             </div>
-            <p class="price">₱10,500.00</p>
-        </div>
-    </div>
-    </a>
+        </a>
 
-</section>
-
-    <section class="shop" id="shop">
-
-        <h1>SHOP BY CATEGORY</h1> <p>Check our collection</p>
-
-        <div class="container">
-
-            <a href="mouse.php" class="prod">
-                <img src="imgvid/Mouse1.jpeg" alt="Computer Mouse">
-
-                <div class="name">
-                    <span>QCERA</span>
-                    <h2>Computer Mouse</h2>
-                </div>
-            </a>
-
-            <a href="monitor.php" class="prod">
-                <img src="imgvid/Monitor2.jpeg" alt="Computer Monitor">
-
-                <div class="name">
-                    <span>QCERA</span>
-                    <h2>Computer Monitor</h2>
-                </div>
-            </a>
-
-            <a href="keyboard.php" class="prod">
-                <img src="imgvid/Keyboard3.jpeg" alt="Keyboard">
-                <div class="name">
-                    <span>QCERA</span>
-                    <h2>Keyboard</h2>
-                </div>
-            </a>
-
-            <a href="pc-components.php" class="prod">
-                <img src="imgvid/PC4.jpeg" alt="PC Components">
-                <div class="name">
-                    <span>QCERA</span>
-                    <h2>PC Components</h2>
-                </div>
-            </a>
-        </div>
     </section>
 
-    <footer class="foot" id="foot">
-        <section class="name-foot">
-            <img src="imgvid/qcera-logo-footer.png">
-        </section>
-        <p>
-            One-stop shop for premium <br>PC components and accessories.
-        </p>
-
-        <div class="footlinks">
-            <a href="" class="fab fa-facebook-f"></a>
-            <a href="" class="fab fa-instagram"></a>
-            <a href="" class="fab fa-youtube"></a>
-            <a href="" class="fab fa-tiktok"></a>
-        </div>
-
-        <p class="copyright">
-            &copy; 2026 QCera. All Rights Reserved.
-        </p>
-
-    </footer>
-
-    <script src="script.js"></script>
-
+<?php
+include 'partials/shop_categories.php';
+include 'partials/site_footer.php';
+?>
 </body>
+
 </html>
